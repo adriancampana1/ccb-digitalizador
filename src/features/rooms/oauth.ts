@@ -1,0 +1,5 @@
+import type { RequestContext } from '../../shared/api/context';import { getOAuthUrl,getRoom } from './roomApi';
+export function connectionOutcome(status:string):'connected'|'pending'{return status==='CONNECTED'?'connected':'pending'}
+export function authorizationUrl(value:string){const url=new URL(value);if(url.protocol!=='https:')throw new Error('O provedor precisa oferecer uma autorização HTTPS compatível com a web.');return url.href}
+export async function connectProvider(ctx:RequestContext,roomId:string):Promise<'connected'|'pending'>{const popup=window.open('about:blank','ccb-oauth','popup,width=560,height=720');if(!popup)throw new Error('Permita a abertura da janela de autorização e tente novamente.');try{popup.opener=null;const data=await getOAuthUrl(ctx,roomId);popup.location.href=authorizationUrl(data.authorizationUrl);return 'pending'}catch(e){popup.close();throw e}}
+export async function checkConnection(ctx:RequestContext,roomId:string){return connectionOutcome((await getRoom(ctx,roomId)).connectionStatus)}
