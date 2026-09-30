@@ -1,0 +1,1 @@
+export type AuthResponse={accessToken:string;name:string;phone:string;canCreateRooms:boolean;createdAt:string;updatedAt:string};
