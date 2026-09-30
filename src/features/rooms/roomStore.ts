@@ -1,12 +1,111 @@
-import { create } from 'zustand';import type { Room } from '../../shared/api/contracts';import type { RoomContext } from '../../shared/api/context';import { registerSessionCleanup,useSession } from '../auth/sessionStore';import { queryClient } from '../../app/queryClient';import { listRooms } from './roomApi';
-const KEY='ccb.room';const guards=new Set<()=>Promise<boolean>>();let generation=0;
-export const useRooms=create<{rooms:Room[];activeRoomId:string|null;loading:boolean;error:string}>(()=>({rooms:[],activeRoomId:null,loading:false,error:''}));
-export const usable=(r:Room)=>r.connectionStatus==='CONNECTED';
-export function applyRooms(sessionId:string,rooms:Room[]){if(useSession.getState().session?.sessionId!==sessionId)return;let saved:string|null=null;try{saved=sessionStorage.getItem(KEY)}catch{/* memory mode */}const current=useRooms.getState().activeRoomId??saved;const chosen=rooms.find(r=>r.id===current)??rooms.find(usable);useRooms.setState({rooms,activeRoomId:chosen?.id??null,error:''});}
-export async function loadRooms(){const ctx=useSession.getState().session;if(!ctx)return;const revision=++generation;useRooms.setState({loading:true,error:''});try{const rooms=await listRooms(ctx);if(revision===generation)applyRooms(ctx.sessionId,rooms)}catch(e){if(revision===generation&&useSession.getState().session?.sessionId===ctx.sessionId)useRooms.setState({error:e instanceof Error?e.message:'Não foi possível carregar as salas.'})}finally{if(revision===generation)useRooms.setState({loading:false})}}
-export function captureRoomContext():RoomContext{const session=useSession.getState().session;const room=useRooms.getState().rooms.find(r=>r.id===useRooms.getState().activeRoomId);if(!session||!room||!usable(room))throw new Error('Selecione uma sala conectada antes de continuar.');return Object.freeze({sessionId:session.sessionId,accessToken:session.accessToken,roomId:room.id,storageProvider:room.storageProvider})}
-export function registerRoomTransitionGuard(fn:()=>Promise<boolean>){guards.add(fn);return()=>{guards.delete(fn)}}
-export async function switchRoom(room:Room){if(!usable(room)||!useRooms.getState().rooms.some(r=>r.id===room.id))return false;for(const guard of guards)if(!await guard())return false;await queryClient.cancelQueries({predicate:q=>q.queryKey.includes('room')});queryClient.removeQueries({predicate:q=>q.queryKey.includes('room')});useRooms.setState({activeRoomId:room.id});try{sessionStorage.setItem(KEY,room.id)}catch{/* memory mode */}return true}
-registerSessionCleanup(()=>{generation++;useRooms.setState({rooms:[],activeRoomId:null,error:'',loading:false});try{sessionStorage.removeItem(KEY)}catch{/* memory mode */}});
-export function useActiveRoom(){return useRooms(s=>s.rooms.find(r=>r.id===s.activeRoomId)??null)}
-export const roomKey=(ctx:RoomContext,...suffix:unknown[])=>['session',ctx.sessionId,'room',ctx.roomId,...suffix];
+import { create } from "zustand";
+import type { Room } from "../../shared/api/contracts";
+import type { RoomContext } from "../../shared/api/context";
+import { registerSessionCleanup, useSession } from "../auth/sessionStore";
+import { queryClient } from "../../app/queryClient";
+import { listRooms } from "./roomApi";
+const KEY = "ccb.room";
+const guards = new Set<() => Promise<boolean>>();
+let generation = 0;
+export const useRooms = create<{
+  rooms: Room[];
+  activeRoomId: string | null;
+  loading: boolean;
+  error: string;
+}>(() => ({ rooms: [], activeRoomId: null, loading: false, error: "" }));
+export const usable = (r: Room) => r.connectionStatus === "CONNECTED";
+export function applyRooms(sessionId: string, rooms: Room[]) {
+  if (useSession.getState().session?.sessionId !== sessionId) return;
+  let saved: string | null = null;
+  try {
+    saved = sessionStorage.getItem(KEY);
+  } catch {
+    /* memory mode */
+  }
+  const current = useRooms.getState().activeRoomId ?? saved;
+  const chosen = rooms.find((r) => r.id === current) ?? rooms.find(usable);
+  useRooms.setState({ rooms, activeRoomId: chosen?.id ?? null, error: "" });
+}
+export async function loadRooms() {
+  const ctx = useSession.getState().session;
+  if (!ctx) return;
+  const revision = ++generation;
+  useRooms.setState({ loading: true, error: "" });
+  try {
+    const rooms = await listRooms(ctx);
+    if (revision === generation) applyRooms(ctx.sessionId, rooms);
+  } catch (e) {
+    if (
+      revision === generation &&
+      useSession.getState().session?.sessionId === ctx.sessionId
+    )
+      useRooms.setState({
+        error:
+          e instanceof Error
+            ? e.message
+            : "Não foi possível carregar as salas.",
+      });
+  } finally {
+    if (revision === generation) useRooms.setState({ loading: false });
+  }
+}
+export function captureRoomContext(): RoomContext {
+  const session = useSession.getState().session;
+  const room = useRooms
+    .getState()
+    .rooms.find((r) => r.id === useRooms.getState().activeRoomId);
+  if (!session || !room || !usable(room))
+    throw new Error("Selecione uma sala conectada antes de continuar.");
+  return Object.freeze({
+    sessionId: session.sessionId,
+    accessToken: session.accessToken,
+    roomId: room.id,
+    storageProvider: room.storageProvider,
+  });
+}
+export function registerRoomTransitionGuard(fn: () => Promise<boolean>) {
+  guards.add(fn);
+  return () => {
+    guards.delete(fn);
+  };
+}
+export async function switchRoom(room: Room) {
+  if (!usable(room) || !useRooms.getState().rooms.some((r) => r.id === room.id))
+    return false;
+  for (const guard of guards) if (!(await guard())) return false;
+  await queryClient.cancelQueries({
+    predicate: (q) => q.queryKey.includes("room"),
+  });
+  queryClient.removeQueries({ predicate: (q) => q.queryKey.includes("room") });
+  useRooms.setState({ activeRoomId: room.id });
+  try {
+    sessionStorage.setItem(KEY, room.id);
+  } catch {
+    /* memory mode */
+  }
+  return true;
+}
+registerSessionCleanup(() => {
+  generation++;
+  useRooms.setState({
+    rooms: [],
+    activeRoomId: null,
+    error: "",
+    loading: false,
+  });
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {
+    /* memory mode */
+  }
+});
+export function useActiveRoom() {
+  return useRooms((s) => s.rooms.find((r) => r.id === s.activeRoomId) ?? null);
+}
+export const roomKey = (ctx: RoomContext, ...suffix: unknown[]) => [
+  "session",
+  ctx.sessionId,
+  "room",
+  ctx.roomId,
+  ...suffix,
+];

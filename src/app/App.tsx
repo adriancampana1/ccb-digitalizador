@@ -1,11 +1,124 @@
-import { useEffect,useState,lazy,Suspense,type ReactNode } from 'react';
-import { BrowserRouter,Routes,Route,Navigate,Link } from 'react-router-dom';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from './queryClient';import { AppShell } from './AppShell';
-import AuthPage from '../features/auth/AuthPage';import ProfilePage from '../features/auth/ProfilePage';import { useSession } from '../features/auth/sessionStore';
-import { loadRooms,useActiveRoom,useRooms } from '../features/rooms/roomStore';import { RoomsPage,JoinRoomPage,RoomDetail } from '../features/rooms/RoomsPage';import { CreateRoomPage,ConnectionPanel } from '../features/rooms/ProviderPages';
-import DocumentsPage from '../features/documents/DocumentsPage';import FoldersPage from '../features/folders/FoldersPage';import { Loading,Notice,Button } from '../shared/ui';
-const ScannerPage=lazy(()=>import('../features/scanner/ScannerPage'));
-function RoomGate({children}:{children:ReactNode}){const room=useActiveRoom();const error=useRooms(s=>s.error);if(error)return <Notice>{error}<Button onClick={()=>loadRooms()}>Tentar novamente</Button></Notice>;if(!room)return <Navigate to="/rooms" replace/>;if(room.connectionStatus!=='CONNECTED')return <Notice kind="info">Esta sala precisa ser conectada antes de acessar os documentos. <Link to={`/rooms/${room.id}`}>Ver conexão da sala</Link></Notice>;return children}
-function PrivateApp(){const session=useSession(s=>s.session)!;const [ready,setReady]=useState('');useEffect(()=>{let active=true;void loadRooms().then(()=>{if(active)setReady(session.sessionId)});return()=>{active=false}},[session.sessionId]);if(ready!==session.sessionId)return <Loading/>;return <AppShell><Suspense fallback={<Loading/>}><Routes><Route path="/documents" element={<RoomGate><DocumentsPage/></RoomGate>}/><Route path="/folders" element={<RoomGate><FoldersPage/></RoomGate>}/><Route path="/scan" element={<RoomGate><ScannerPage/></RoomGate>}/><Route path="/rooms" element={<RoomsPage/>}/><Route path="/rooms/new" element={<CreateRoomPage/>}/><Route path="/rooms/join" element={<JoinRoomPage/>}/><Route path="/rooms/:roomId" element={<RoomDetail connection={room=><ConnectionPanel key={room.id} room={room}/>}/>}/><Route path="/profile" element={<ProfilePage/>}/><Route path="*" element={<Navigate to="/documents" replace/>}/></Routes></Suspense></AppShell>}
-export default function App(){const session=useSession(s=>s.session);return <QueryClientProvider client={queryClient}><BrowserRouter>{session?<PrivateApp key={session.sessionId}/>:<Routes><Route path="/register" element={<AuthPage registering/>}/><Route path="*" element={<AuthPage/>}/></Routes>}</BrowserRouter></QueryClientProvider>}
+import { useEffect, useState, lazy, Suspense, type ReactNode } from "react";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./queryClient";
+import { AppShell } from "./AppShell";
+import AuthPage from "../features/auth/AuthPage";
+import ProfilePage from "../features/auth/ProfilePage";
+import { useSession } from "../features/auth/sessionStore";
+import {
+  loadRooms,
+  useActiveRoom,
+  useRooms,
+} from "../features/rooms/roomStore";
+import {
+  RoomsPage,
+  JoinRoomPage,
+  RoomDetail,
+} from "../features/rooms/RoomsPage";
+import {
+  CreateRoomPage,
+  ConnectionPanel,
+} from "../features/rooms/ProviderPages";
+import DocumentsPage from "../features/documents/DocumentsPage";
+import FoldersPage from "../features/folders/FoldersPage";
+import { Loading, Notice, Button } from "../shared/ui";
+const ScannerPage = lazy(() => import("../features/scanner/ScannerPage"));
+function RoomGate({ children }: { children: ReactNode }) {
+  const room = useActiveRoom();
+  const error = useRooms((s) => s.error);
+  if (error)
+    return (
+      <Notice>
+        {error}
+        <Button onClick={() => loadRooms()}>Tentar novamente</Button>
+      </Notice>
+    );
+  if (!room) return <Navigate to="/rooms" replace />;
+  if (room.connectionStatus !== "CONNECTED")
+    return (
+      <Notice kind="info">
+        Esta sala precisa ser conectada antes de acessar os documentos.{" "}
+        <Link to={`/rooms/${room.id}`}>Ver conexão da sala</Link>
+      </Notice>
+    );
+  return children;
+}
+function PrivateApp() {
+  const session = useSession((s) => s.session)!;
+  const [ready, setReady] = useState("");
+  useEffect(() => {
+    let active = true;
+    void loadRooms().then(() => {
+      if (active) setReady(session.sessionId);
+    });
+    return () => {
+      active = false;
+    };
+  }, [session.sessionId]);
+  if (ready !== session.sessionId) return <Loading />;
+  return (
+    <AppShell>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route
+            path="/documents"
+            element={
+              <RoomGate>
+                <DocumentsPage />
+              </RoomGate>
+            }
+          />
+          <Route
+            path="/folders"
+            element={
+              <RoomGate>
+                <FoldersPage />
+              </RoomGate>
+            }
+          />
+          <Route
+            path="/scan"
+            element={
+              <RoomGate>
+                <ScannerPage />
+              </RoomGate>
+            }
+          />
+          <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/rooms/new" element={<CreateRoomPage />} />
+          <Route path="/rooms/join" element={<JoinRoomPage />} />
+          <Route
+            path="/rooms/:roomId"
+            element={
+              <RoomDetail
+                connection={(room) => (
+                  <ConnectionPanel key={room.id} room={room} />
+                )}
+              />
+            }
+          />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="*" element={<Navigate to="/documents" replace />} />
+        </Routes>
+      </Suspense>
+    </AppShell>
+  );
+}
+export default function App() {
+  const session = useSession((s) => s.session);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        {session ? (
+          <PrivateApp key={session.sessionId} />
+        ) : (
+          <Routes>
+            <Route path="/register" element={<AuthPage registering />} />
+            <Route path="*" element={<AuthPage />} />
+          </Routes>
+        )}
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}

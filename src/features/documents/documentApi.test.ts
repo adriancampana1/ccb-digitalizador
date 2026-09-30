@@ -1,6 +1,57 @@
-import { it,expect,beforeEach } from 'vitest';import { installSession,clearSession } from '../auth/sessionStore';import { client } from '../../shared/api/client';import { getDownload,parseFilename } from './documentApi';import { listFolders } from '../folders/folderApi';
-let seen:any;beforeEach(()=>{clearSession();seen=null;client.defaults.baseURL='https://example.invalid';client.defaults.adapter=async config=>{seen=config;return {data:config.url==='/folders'?{folders:[],provider:'google_drive'}:new Blob(['file']),headers:{},status:200,statusText:'OK',config}}});
-function ctx(){return {...installSession({accessToken:'token',name:'Test',phone:'123',canCreateRooms:true,createdAt:'',updatedAt:''}),roomId:'B',storageProvider:'google_drive'}}
-it('includes room and bearer credentials in binary downloads',async()=>{await getDownload(ctx(),'id');expect(seen.headers['X-Room-Id']).toBe('B');expect(seen.headers.Authorization).toBe('Bearer token')});
-it('preserves empty root and provider',async()=>{await listFolders(ctx(),'');expect(seen.params.folderPath).toBe('');expect(seen.params.storageProvider).toBe('google_drive')});
-it('prefers UTF8 names and safe fallback',()=>{expect(parseFilename("attachment; filename=x.pdf; filename*=UTF-8''Ata%20da%20reuni%C3%A3o.pdf",'fallback.pdf')).toBe('Ata da reunião.pdf');expect(parseFilename('', 'fallback.pdf')).toBe('fallback.pdf')});
+import { it, expect, beforeEach } from "vitest";
+import { installSession, clearSession } from "../auth/sessionStore";
+import { client } from "../../shared/api/client";
+import { getDownload, parseFilename } from "./documentApi";
+import { listFolders } from "../folders/folderApi";
+let seen: any;
+beforeEach(() => {
+  clearSession();
+  seen = null;
+  client.defaults.baseURL = "https://example.invalid";
+  client.defaults.adapter = async (config) => {
+    seen = config;
+    return {
+      data:
+        config.url === "/folders"
+          ? { folders: [], provider: "google_drive" }
+          : new Blob(["file"]),
+      headers: {},
+      status: 200,
+      statusText: "OK",
+      config,
+    };
+  };
+});
+function ctx() {
+  return {
+    ...installSession({
+      accessToken: "token",
+      name: "Test",
+      phone: "123",
+      canCreateRooms: true,
+      createdAt: "",
+      updatedAt: "",
+    }),
+    roomId: "B",
+    storageProvider: "google_drive",
+  };
+}
+it("includes room and bearer credentials in binary downloads", async () => {
+  await getDownload(ctx(), "id");
+  expect(seen.headers["X-Room-Id"]).toBe("B");
+  expect(seen.headers.Authorization).toBe("Bearer token");
+});
+it("preserves empty root and provider", async () => {
+  await listFolders(ctx(), "");
+  expect(seen.params.folderPath).toBe("");
+  expect(seen.params.storageProvider).toBe("google_drive");
+});
+it("prefers UTF8 names and safe fallback", () => {
+  expect(
+    parseFilename(
+      "attachment; filename=x.pdf; filename*=UTF-8''Ata%20da%20reuni%C3%A3o.pdf",
+      "fallback.pdf",
+    ),
+  ).toBe("Ata da reunião.pdf");
+  expect(parseFilename("", "fallback.pdf")).toBe("fallback.pdf");
+});

@@ -1,1 +1,14 @@
-:root{--primary:#003d5c;--primary-hover:#005575;--tint:#e8f0f3;--bg:#f7f8f9;--paper:#fff;--ink:#20333e;--muted:#62727e;--line:#dfe5e8;--danger:#a52c32;--success:#226b50;--radius:14px;--font:'Lexend Deca',sans-serif;}
+:root {
+  --primary: #003d5c;
+  --primary-hover: #005575;
+  --tint: #e8f0f3;
+  --bg: #f7f8f9;
+  --paper: #fff;
+  --ink: #20333e;
+  --muted: #62727e;
+  --line: #dfe5e8;
+  --danger: #a52c32;
+  --success: #226b50;
+  --radius: 14px;
+  --font: "Lexend Deca", sans-serif;
+}

@@ -1,3 +1,128 @@
-import { useState } from 'react';import { Link,useNavigate } from 'react-router-dom';import { ArrowRight } from 'lucide-react';
-import { Button,Field,Notice } from '../../shared/ui';import { errorMessage } from '../../shared/api/error';import { isDemo } from '../../shared/api/client';import { login,register } from './authApi';import { installSession } from './sessionStore';
-export default function AuthPage({registering=false}:{registering?:boolean}){const [error,setError]=useState('');const [busy,setBusy]=useState(false);const navigate=useNavigate();async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();if(busy)return;const data=new FormData(e.currentTarget);setBusy(true);setError('');try{const phone=String(data.get('phone')).replace(/\D/g,'');if(phone.length<10||phone.length>13)throw new Error('Informe um telefone válido com DDD.');const input={phone,password:String(data.get('password'))};const response=registering?await register({...input,name:String(data.get('name')).trim(),accessCode:String(data.get('code')).trim()}):await login(input);installSession(response);navigate('/documents',{replace:true})}catch(e){setError(errorMessage(e))}finally{setBusy(false)}}return <main className="auth-layout"><section className="auth-brand"><img src="/assets/logo-ccb.png" alt="Congregação Cristã no Brasil"/><div><h1>Do papel para<br/>o lugar certo.</h1><p>Os documentos da sua congregação,<br/>organizados e sempre à mão.</p></div><small>Digitalizador CCB · Uso interno</small></section><section className="auth-content"><div className="auth-form"><span className="wordmark">Digitalizador <b>CCB</b></span><h2>{registering?'Crie sua conta':'Acesse sua conta'}</h2><p className="muted">{registering?'Use o código da sua congregação para começar.':'Entre para continuar o trabalho da sua congregação.'}</p>{isDemo&&<Notice kind="info">Demonstração com dados fictícios. Use um telefone válido e qualquer senha.</Notice>}{error&&<Notice>{error}</Notice>}<form onSubmit={submit}>{registering&&<><Field label="Código de acesso" name="code" required minLength={4}/><Field label="Nome completo" name="name" autoComplete="name" required minLength={3}/></>}<Field label="Telefone" name="phone" type="tel" autoComplete="tel" placeholder="(43) 99999-9999" required/><Field label="Senha" name="password" type="password" autoComplete={registering?'new-password':'current-password'} required minLength={registering?6:1}/><Button type="submit" busy={busy}>{registering?'Criar conta':'Entrar'}<ArrowRight size={17}/></Button></form><p className="auth-link"><Link to={registering?'/login':'/register'}>{registering?'Já tenho uma conta':'Primeiro acesso? Criar conta'}</Link></p></div></section></main>}
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Button, Field, Notice } from "../../shared/ui";
+import { errorMessage } from "../../shared/api/error";
+import { isDemo } from "../../shared/api/client";
+import { login, register } from "./authApi";
+import { installSession } from "./sessionStore";
+export default function AuthPage({
+  registering = false,
+}: {
+  registering?: boolean;
+}) {
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const navigate = useNavigate();
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (busy) return;
+    const data = new FormData(e.currentTarget);
+    setBusy(true);
+    setError("");
+    try {
+      const phone = String(data.get("phone")).replace(/\D/g, "");
+      if (phone.length < 10 || phone.length > 13)
+        throw new Error("Informe um telefone válido com DDD.");
+      const input = { phone, password: String(data.get("password")) };
+      const response = registering
+        ? await register({
+            ...input,
+            name: String(data.get("name")).trim(),
+            accessCode: String(data.get("code")).trim(),
+          })
+        : await login(input);
+      installSession(response);
+      navigate("/documents", { replace: true });
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <main className="auth-layout">
+      <section className="auth-brand">
+        <img src="/assets/logo-ccb.png" alt="Congregação Cristã no Brasil" />
+        <div>
+          <h1>
+            Do papel para
+            <br />o lugar certo.
+          </h1>
+          <p>
+            Os documentos da sua congregação,
+            <br />
+            organizados e sempre à mão.
+          </p>
+        </div>
+        <small>Digitalizador CCB · Uso interno</small>
+      </section>
+      <section className="auth-content">
+        <div className="auth-form">
+          <span className="wordmark">
+            Digitalizador <b>CCB</b>
+          </span>
+          <h2>{registering ? "Crie sua conta" : "Acesse sua conta"}</h2>
+          <p className="muted">
+            {registering
+              ? "Use o código da sua congregação para começar."
+              : "Entre para continuar o trabalho da sua congregação."}
+          </p>
+          {isDemo && (
+            <Notice kind="info">
+              Demonstração com dados fictícios. Use um telefone válido e
+              qualquer senha.
+            </Notice>
+          )}
+          {error && <Notice>{error}</Notice>}
+          <form onSubmit={submit}>
+            {registering && (
+              <>
+                <Field
+                  label="Código de acesso"
+                  name="code"
+                  required
+                  minLength={4}
+                />
+                <Field
+                  label="Nome completo"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  minLength={3}
+                />
+              </>
+            )}
+            <Field
+              label="Telefone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              placeholder="(43) 99999-9999"
+              required
+            />
+            <Field
+              label="Senha"
+              name="password"
+              type="password"
+              autoComplete={registering ? "new-password" : "current-password"}
+              required
+              minLength={registering ? 6 : 1}
+            />
+            <Button type="submit" busy={busy}>
+              {registering ? "Criar conta" : "Entrar"}
+              <ArrowRight size={17} />
+            </Button>
+          </form>
+          <p className="auth-link">
+            <Link to={registering ? "/login" : "/register"}>
+              {registering
+                ? "Já tenho uma conta"
+                : "Primeiro acesso? Criar conta"}
+            </Link>
+          </p>
+        </div>
+      </section>
+    </main>
+  );
+}

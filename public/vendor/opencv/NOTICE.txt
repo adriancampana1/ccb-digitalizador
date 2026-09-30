@@ -1,0 +1,5 @@
+OpenCV.js via @techstark/opencv-js 5.0.0-release.1
+Source: git+https://github.com/TechStark/opencv-js.git
+License: Apache-2.0
+The WebAssembly binary is embedded in opencv.js. No runtime CDN.
+SHA-256: b873c8211421da7b9bf41ae157a923f05a46a0b8d3e5904c44c6f3ad6d39a1bd
