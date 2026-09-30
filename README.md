@@ -55,11 +55,11 @@ npm run test:e2e
 
 Playwright usa uma API simulada explicitamente configurada. O teste de processamento carrega o OpenCV real, com papel e marcas sintéticas. Os testes não comprovam integração com o backend, câmera física, qualidade de documentos reais ou compatibilidade com Safari. Veja `docs/validation/`.
 
-O workflow `.github/workflows/ci.yml` executa os mesmos gates no GitHub. A conexão GitHub disponível nesta execução negou escrita (403); os commits estão locais, sem push, PR ou CI remoto executado.
+O workflow `.github/workflows/ci.yml` executa os mesmos gates no GitHub. As permissões de escrita da integração foram atualizadas em 30/09/2026. Consulte o GitHub Actions para o resultado das verificações remotas.
 
 ## Build e hospedagem
 
-`npm run build` gera `dist/`. O pré-build copia a distribuição OpenCV fixada no lockfile e gera seu aviso com hash SHA-256. O motor é carregado somente quando usado; JS e WebAssembly são servidos pela própria aplicação, sem CDN. As fontes também são locais.
+`npm run build` gera `dist/`. O pré-dev e o pré-build copiam a distribuição OpenCV fixada no lockfile e gera seu aviso com hash SHA-256. O arquivo gerado `public/vendor/opencv/opencv.js` não é versionado. O motor é carregado somente quando usado; JS e WebAssembly são servidos pela própria aplicação, sem CDN. As fontes também são locais.
 
 Sirva `dist/` em HTTPS, com fallback das rotas da SPA para `index.html`. O build atual assume a raiz do domínio. Disponibilize `/scanner-worker.js`, `/vendor/opencv/opencv.js`, `/assets/` e `/licenses/`. Não redirecione esses arquivos para HTML. A câmera só funciona em contexto seguro (HTTPS ou localhost).
 

@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "prepare:opencv": "node scripts/prepare-opencv.mjs",
     "format": "prettier --write src e2e scripts *.ts *.js public/scanner-worker.js",
-    "prebuild": "npm run prepare:opencv"
+    "prebuild": "npm run prepare:opencv",
+    "predev": "npm run prepare:opencv"
   },
   "dependencies": {
     "@fontsource/lexend-deca": "^5.3.0",

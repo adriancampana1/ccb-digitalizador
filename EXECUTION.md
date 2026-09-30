@@ -21,3 +21,7 @@ git remote set-url origin https://github.com/adriancampana1/ccb-digitalizador.gi
 ```
 
 Após liberar escrita, conferir se o repositório remoto recebeu mudanças antes de enviar a branch. Não usar force push. A sincronização remota é a única etapa de entrega bloqueada; homologação com backend/dispositivos continua separada.
+
+## Atualização de entrega — 30/09/2026
+
+O usuário atualizou as permissões; a escrita pela integração foi confirmada. A sincronização usa a API GitHub porque o terminal não tem credenciais Git. Os commits remotos são recriados a partir dos locais, com novos SHAs. O OpenCV gerado (13 MB) é omitido das árvores remotas devido ao limite de transporte; `predev` e `prebuild` o geram da dependência fixada. Não há alteração no motor usado em execução. As notas de bloqueio 403 acima são históricas.
