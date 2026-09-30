@@ -17,6 +17,11 @@ import { validatePdf } from "./upload";
 import type { ScanPage } from "./types";
 export default function ScannerPage() {
   const batch = useBatch((s) => s.batch);
+  const roomAvailable = useRooms((s) =>
+    s.rooms.some(
+      (r) => r.id === s.activeRoomId && r.connectionStatus === "CONNECTED",
+    ),
+  );
   const [selected, setSelected] = useState(""),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -25,6 +30,8 @@ export default function ScannerPage() {
     [replace, setReplace] = useState(false);
   const pdf = batch?.importedPdf ?? null;
   const generation = useRef(0);
+  const imageInput = useRef<HTMLInputElement>(null);
+  const pdfInput = useRef<HTMLInputElement>(null);
   const locked =
     busy || batch?.phase === "processing" || batch?.phase === "uploading";
   const page = batch?.pages.find((p) => p.id === selected) ?? batch?.pages[0];
@@ -102,7 +109,20 @@ export default function ScannerPage() {
     }
   }
   function changePages(pages: ScanPage[]) {
-    if (batch && !locked) useBatch.setState({ batch: { ...batch, pages } });
+    if (!batch || locked) return;
+    useBatch.setState((state) => {
+      const current = state.batch;
+      // Async editor callbacks may belong to removed pages, old edits or an earlier phase.
+      if (
+        !current ||
+        current.context !== batch.context ||
+        current.pages !== batch.pages ||
+        current.phase === "processing" ||
+        current.phase === "uploading"
+      )
+        return state;
+      return { batch: { ...current, pages } };
+    });
   }
   function finish() {
     setSuccess(true);
@@ -134,6 +154,13 @@ export default function ScannerPage() {
           </Button>
         ) : null}
       </div>
+      {!roomAvailable && (
+        <Notice kind="info">
+          A sala deste lote está indisponível. Você pode baixar as páginas; para
+          trabalhar em outra sala, escolha o novo destino e confirme o descarte
+          deste lote.
+        </Notice>
+      )}
       {success && (
         <Notice kind="success">
           Documento enviado para a sala.{" "}
@@ -164,7 +191,7 @@ export default function ScannerPage() {
             </p>
             <CameraView
               onCapture={(blob) => addImages([blob])}
-              disabled={!!locked || !!pdf}
+              disabled={!!locked || !!pdf || !roomAvailable}
             />
             <div className="import-field">
               <label htmlFor="images-input" className="icon-label">
@@ -172,17 +199,35 @@ export default function ScannerPage() {
                 Importar imagens
               </label>
               <input
+                ref={imageInput}
+                className="sr-only"
+                tabIndex={-1}
                 id="images-input"
                 type="file"
                 accept="image/jpeg,image/png"
                 multiple={!replace}
-                disabled={!!locked || !!pdf}
+                disabled={!!locked || !!pdf || !roomAvailable}
                 onChange={(e) => {
                   const files = Array.from(e.target.files ?? []);
                   e.currentTarget.value = "";
                   void addImages(files);
                 }}
               />
+              <div className="file-picker">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={!!locked || !!pdf || !roomAvailable}
+                  onClick={() => imageInput.current?.click()}
+                >
+                  Selecionar imagens
+                </Button>
+                <small>
+                  {batch?.pages.length
+                    ? `${batch.pages.length} página(s) adicionada(s)`
+                    : "Nenhuma imagem selecionada"}
+                </small>
+              </div>
             </div>
             {!batch?.pages.length && (
               <details>
@@ -202,10 +247,13 @@ export default function ScannerPage() {
                   <>
                     <label htmlFor="pdf-input">Importar PDF</label>
                     <input
+                      ref={pdfInput}
+                      className="sr-only"
+                      tabIndex={-1}
                       id="pdf-input"
                       type="file"
                       accept="application/pdf"
-                      disabled={!!locked}
+                      disabled={!!locked || !roomAvailable}
                       onChange={async (e) => {
                         const file = e.target.files?.[0];
                         e.currentTarget.value = "";
@@ -237,6 +285,17 @@ export default function ScannerPage() {
                         }
                       }}
                     />
+                    <div className="file-picker">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        disabled={!!locked || !roomAvailable}
+                        onClick={() => pdfInput.current?.click()}
+                      >
+                        Selecionar PDF
+                      </Button>
+                      <small>{pdf?.name ?? "Nenhum PDF selecionado"}</small>
+                    </div>
                   </>
                 )}
               </details>
@@ -297,7 +356,6 @@ export default function ScannerPage() {
             />
           ) : (
             <div className="scan-guide">
-              <span className="eyebrow">UMA BOA DIGITALIZAÇÃO</span>
               <h2>O papel bem visível.</h2>
               <ol>
                 <li>Coloque o documento sobre uma superfície contrastante.</li>

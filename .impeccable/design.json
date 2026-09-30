@@ -1,1 +1,274 @@
-{"palette":{"primary":"#003D5C","background":"#F7F8F9","surface":"#FFFFFF","text":"#20333E","muted":"#62727E"},"typography":{"family":"Lexend Deca","weights":[400,500,600]},"radii":{"control":9,"surface":14},"mode":"operate"}
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T01:06:47.391551+00:00",
+  "title": "Design System: Digitalizador CCB — web",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "primary",
+        "tonalRamp": [
+          "oklch(15.00% 0.0773 239.13)",
+          "oklch(26.43% 0.0773 239.13)",
+          "oklch(37.86% 0.0773 239.13)",
+          "oklch(49.29% 0.0773 239.13)",
+          "oklch(60.71% 0.0773 239.13)",
+          "oklch(72.14% 0.0773 239.13)",
+          "oklch(83.57% 0.0773 239.13)",
+          "oklch(95.00% 0.0773 239.13)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "primary-hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0868 232.56)",
+          "oklch(26.43% 0.0868 232.56)",
+          "oklch(37.86% 0.0868 232.56)",
+          "oklch(49.29% 0.0868 232.56)",
+          "oklch(60.71% 0.0868 232.56)",
+          "oklch(72.14% 0.0868 232.56)",
+          "oklch(83.57% 0.0868 232.56)",
+          "oklch(95.00% 0.0868 232.56)"
+        ]
+      },
+      "tint": {
+        "role": "semantic",
+        "displayName": "tint",
+        "tonalRamp": [
+          "oklch(15.00% 0.0095 222.06)",
+          "oklch(26.43% 0.0095 222.06)",
+          "oklch(37.86% 0.0095 222.06)",
+          "oklch(49.29% 0.0095 222.06)",
+          "oklch(60.71% 0.0095 222.06)",
+          "oklch(72.14% 0.0095 222.06)",
+          "oklch(83.57% 0.0095 222.06)",
+          "oklch(95.00% 0.0095 222.06)"
+        ]
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "bg",
+        "tonalRamp": [
+          "oklch(15.00% 0.0017 247.84)",
+          "oklch(26.43% 0.0017 247.84)",
+          "oklch(37.86% 0.0017 247.84)",
+          "oklch(49.29% 0.0017 247.84)",
+          "oklch(60.71% 0.0017 247.84)",
+          "oklch(72.14% 0.0017 247.84)",
+          "oklch(83.57% 0.0017 247.84)",
+          "oklch(95.00% 0.0017 247.84)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0316 234.58)",
+          "oklch(26.43% 0.0316 234.58)",
+          "oklch(37.86% 0.0316 234.58)",
+          "oklch(49.29% 0.0316 234.58)",
+          "oklch(60.71% 0.0316 234.58)",
+          "oklch(72.14% 0.0316 234.58)",
+          "oklch(83.57% 0.0316 234.58)",
+          "oklch(95.00% 0.0316 234.58)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "muted",
+        "tonalRamp": [
+          "oklch(15.00% 0.0268 240.46)",
+          "oklch(26.43% 0.0268 240.46)",
+          "oklch(37.86% 0.0268 240.46)",
+          "oklch(49.29% 0.0268 240.46)",
+          "oklch(60.71% 0.0268 240.46)",
+          "oklch(72.14% 0.0268 240.46)",
+          "oklch(83.57% 0.0268 240.46)",
+          "oklch(95.00% 0.0268 240.46)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "line",
+        "tonalRamp": [
+          "oklch(15.00% 0.0077 228.86)",
+          "oklch(26.43% 0.0077 228.86)",
+          "oklch(37.86% 0.0077 228.86)",
+          "oklch(49.29% 0.0077 228.86)",
+          "oklch(60.71% 0.0077 228.86)",
+          "oklch(72.14% 0.0077 228.86)",
+          "oklch(83.57% 0.0077 228.86)",
+          "oklch(95.00% 0.0077 228.86)"
+        ]
+      },
+      "danger": {
+        "role": "semantic",
+        "displayName": "danger",
+        "tonalRamp": [
+          "oklch(15.00% 0.1569 22.77)",
+          "oklch(26.43% 0.1569 22.77)",
+          "oklch(37.86% 0.1569 22.77)",
+          "oklch(49.29% 0.1569 22.77)",
+          "oklch(60.71% 0.1569 22.77)",
+          "oklch(72.14% 0.1569 22.77)",
+          "oklch(83.57% 0.1569 22.77)",
+          "oklch(95.00% 0.1569 22.77)"
+        ]
+      },
+      "success": {
+        "role": "semantic",
+        "displayName": "success",
+        "tonalRamp": [
+          "oklch(15.00% 0.0845 164.80)",
+          "oklch(26.43% 0.0845 164.80)",
+          "oklch(37.86% 0.0845 164.80)",
+          "oklch(49.29% 0.0845 164.80)",
+          "oklch(60.71% 0.0845 164.80)",
+          "oklch(72.14% 0.0845 164.80)",
+          "oklch(83.57% 0.0845 164.80)",
+          "oklch(95.00% 0.0845 164.80)"
+        ]
+      }
+    },
+    "shadows": [
+      {
+        "name": "dialog",
+        "value": "0 24px 80px #003d5c25",
+        "purpose": "Elevação do diálogo."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-background",
+        "value": "background 0.15s",
+        "purpose": "Resposta de estado, desativada com movimento reduzido."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "scanner-stack",
+        "value": "1100px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1000px"
+      },
+      {
+        "name": "mobile-navigation",
+        "value": "700px"
+      },
+      {
+        "name": "scanner-controls-stack",
+        "value": "500px"
+      }
+    ],
+    "focus": {
+      "outline": "3px solid #537d94",
+      "outlineOffset": "3px"
+    },
+    "accessibility": {
+      "touchTargetMin": "44px",
+      "nativeControlAccent": "var(--primary)",
+      "cornerKeyboard": "Arrow keys; Shift increases step"
+    },
+    "tonalRampNote": "Prévia sintetizada para o painel; não substitui tokens de produção."
+  },
+  "components": [
+    {
+      "name": "Botão primary",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação primary do sistema.",
+      "html": "<button class=\"ds-button-primary\">Continuar</button>",
+      "css": ".ds-button-primary{font:500 14px \"Lexend Deca\",sans-serif;border-radius:9px;min-height:44px;padding:10px 18px;cursor:pointer;transition:background .15s;background:var(--primary);color:var(--paper);border:1px solid transparent}.ds-button-primary:hover{background:var(--primary-hover)}.ds-button-primary:focus-visible{outline:3px solid #537d94;outline-offset:3px}.ds-button-primary:disabled{opacity:.55;cursor:wait}"
+    },
+    {
+      "name": "Botão secondary",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Ação secondary do sistema.",
+      "html": "<button class=\"ds-button-secondary\">Continuar</button>",
+      "css": ".ds-button-secondary{font:500 14px \"Lexend Deca\",sans-serif;border-radius:9px;min-height:44px;padding:10px 18px;cursor:pointer;transition:background .15s;background:var(--paper);color:var(--primary);border:1px solid var(--line)}.ds-button-secondary:hover{background:var(--tint)}.ds-button-secondary:focus-visible{outline:3px solid #537d94;outline-offset:3px}.ds-button-secondary:disabled{opacity:.55;cursor:wait}"
+    },
+    {
+      "name": "Botão ghost",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Ação ghost do sistema.",
+      "html": "<button class=\"ds-button-ghost\">Continuar</button>",
+      "css": ".ds-button-ghost{font:500 14px \"Lexend Deca\",sans-serif;border-radius:9px;min-height:44px;padding:10px 18px;cursor:pointer;transition:background .15s;background:transparent;color:var(--ink);border:1px solid transparent}.ds-button-ghost:hover{background:var(--tint)}.ds-button-ghost:focus-visible{outline:3px solid #537d94;outline-offset:3px}.ds-button-ghost:disabled{opacity:.55;cursor:wait}"
+    },
+    {
+      "name": "Botão danger",
+      "kind": "button",
+      "description": "Ação danger do sistema.",
+      "html": "<button class=\"ds-button-danger\">Continuar</button>",
+      "css": ".ds-button-danger{font:500 14px \"Lexend Deca\",sans-serif;border-radius:9px;min-height:44px;padding:10px 18px;cursor:pointer;transition:background .15s;background:#fff0f0;color:var(--danger);border:1px solid #f0d0d1}.ds-button-danger:hover{background:#fff0f0}.ds-button-danger:focus-visible{outline:3px solid #537d94;outline-offset:3px}.ds-button-danger:disabled{opacity:.55;cursor:wait}"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Rótulo associado e foco visível.",
+      "html": "<label class=\"ds-label\" for=\"ds-name\">Nome do documento</label><input class=\"ds-input\" id=\"ds-name\" placeholder=\"Nome do documento\">",
+      "css": ".ds-label{display:block;font:500 14px \"Lexend Deca\",sans-serif;margin-bottom:7px}.ds-input{font:14px \"Lexend Deca\",sans-serif;border:1px solid #b5c2ca;border-radius:9px;min-height:46px;padding:11px 13px;background:var(--paper);color:var(--ink);caret-color:var(--primary)}.ds-input::placeholder{color:var(--muted)}.ds-input:focus-visible{outline:3px solid #537d94;outline-offset:3px}"
+    },
+    {
+      "name": "Navegação",
+      "kind": "nav",
+      "description": "Estado ativo tonal.",
+      "html": "<nav aria-label=\"Exemplo\"><a class=\"ds-nav\" aria-current=\"page\" href=\"#\">Documentos</a></nav>",
+      "css": ".ds-nav{display:block;padding:12px 14px;border-radius:9px;min-height:46px;background:var(--tint);color:var(--primary);font:500 14px \"Lexend Deca\",sans-serif;text-decoration:none}.ds-nav:hover{background:var(--bg)}.ds-nav:focus-visible{outline:3px solid #537d94;outline-offset:3px}"
+    },
+    {
+      "name": "Superfície",
+      "kind": "card",
+      "refersTo": "surface",
+      "description": "Painel funcional delimitado por borda.",
+      "html": "<section class=\"ds-surface\"><h2>Salvar documento</h2><p>Revise antes de salvar.</p></section>",
+      "css": ".ds-surface{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);padding:24px;font:14px \"Lexend Deca\",sans-serif}.ds-surface h2{font-size:20px;font-weight:500}.ds-surface p{color:var(--muted)}"
+    },
+    {
+      "name": "Ajuste de contraste",
+      "kind": "custom",
+      "description": "Range nativo com acento institucional.",
+      "html": "<label class=\"ds-range-label\" for=\"ds-range\">Contraste</label><input class=\"ds-range\" id=\"ds-range\" type=\"range\" min=\"0.5\" max=\"2\" step=\"0.1\" value=\"1\">",
+      "css": ".ds-range-label{display:block;font:500 12px \"Lexend Deca\",sans-serif;color:var(--ink)}.ds-range{accent-color:var(--primary);min-height:44px;width:100%}.ds-range:focus-visible{outline:3px solid #537d94;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "overview": "Identidade herdada do aplicativo CCB e modernizada em modo Operate: minimalista, clean e profissional. O logo original e o azul institucional permanecem como referências fixas; superfícies claras, tipografia legível e controles explícitos apoiam o uso interno recorrente.",
+    "keyCharacteristics": [
+      "Fundo claro e superfícies brancas delimitadas por bordas discretas.",
+      "Sala ativa visível e ações com linguagem direta em português.",
+      "Navegação e editor reorganizados para celular e computador."
+    ],
+    "rules": [],
+    "dos": [
+      "Do preservar o logo original e a identidade institucional.",
+      "Do manter foco visível, rótulos associados e alvos de toque de pelo menos 44px.",
+      "Do oferecer ajuste dos cantos por teclado além do arraste.",
+      "Do localizar ações e estados de seleção de arquivos em português."
+    ],
+    "donts": [
+      "Don't adicionar gradientes ou efeitos decorativos à interface operacional.",
+      "Don't usar o seletor de arquivos nativo como apresentação visível dependente do idioma do navegador.",
+      "Don't ocultar a sala e o destino das ações de envio."
+    ]
+  }
+}

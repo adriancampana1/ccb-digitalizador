@@ -6,7 +6,12 @@ test("responsive screens remain usable at desktop, mobile and narrow widths", as
   await mkdir(".impeccable/review", { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
+  await expect(page.getByLabel("Telefone")).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/login-desktop.png",
     fullPage: true,
@@ -17,11 +22,19 @@ test("responsive screens remain usable at desktop, mobile and narrow widths", as
   await expect(
     page.getByText("Ata da reunião administrativa", { exact: true }),
   ).toBeVisible();
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/desktop.png",
     fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/mobile.png",
     fullPage: true,
@@ -37,16 +50,28 @@ test("responsive screens remain usable at desktop, mobile and narrow widths", as
     page.getByRole("button", { name: "Editar página 1" }),
   ).toBeVisible();
   await page.getByLabel("Nome do documento").fill("Registro da reunião");
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/scanner-mobile.png",
     fullPage: true,
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/scanner-desktop.png",
     fullPage: true,
   });
   await page.setViewportSize({ width: 320, height: 720 });
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+    window.scrollTo(0, 0);
+  });
   await page.screenshot({
     path: ".impeccable/review/narrow.png",
     fullPage: true,

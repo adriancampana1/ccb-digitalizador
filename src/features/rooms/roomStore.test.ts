@@ -60,3 +60,10 @@ it("captures immutable provider and room", async () => {
   expect(context.roomId).toBe("A");
   expect(context.storageProvider).toBe("google_drive");
 });
+it("does not silently select another room when the active room disappears", () => {
+  const session = installSession(auth);
+  applyRooms(session.sessionId, [room("A"), room("B")]);
+  applyRooms(session.sessionId, [room("B")]);
+  expect(useRooms.getState().activeRoomId).toBe("A");
+  expect(() => captureRoomContext()).toThrow();
+});

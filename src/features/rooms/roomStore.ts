@@ -22,9 +22,13 @@ export function applyRooms(sessionId: string, rooms: Room[]) {
   } catch {
     /* memory mode */
   }
-  const current = useRooms.getState().activeRoomId ?? saved;
-  const chosen = rooms.find((r) => r.id === current) ?? rooms.find(usable);
-  useRooms.setState({ rooms, activeRoomId: chosen?.id ?? null, error: "" });
+  const active = useRooms.getState().activeRoomId;
+  const current = active ?? saved;
+  const chosen =
+    rooms.find((r) => r.id === current) ??
+    (!active ? rooms.find(usable) : undefined);
+  // Losing access is not permission to choose a new destination. Explicit switches run guards.
+  useRooms.setState({ rooms, activeRoomId: chosen?.id ?? active, error: "" });
 }
 export async function loadRooms() {
   const ctx = useSession.getState().session;

@@ -18,6 +18,7 @@ export function PageEditor({
   const [preview, setPreview] = useState<Blob | null>(null),
     [view, setView] = useState<"corners" | "result" | "original">("corners"),
     [busy, setBusy] = useState(false),
+    [detecting, setDetecting] = useState(false),
     [error, setError] = useState(""),
     [zoom, setZoom] = useState(1);
   const result = useBlobUrl(preview);
@@ -27,7 +28,10 @@ export function PageEditor({
   useEffect(() => {
     let cancelled = false;
     setPreview(null);
-    if (view !== "result" || !valid) return;
+    if (view !== "result" || !valid) {
+      setBusy(false);
+      return;
+    }
     setBusy(true);
     const timer = setTimeout(() => {
       renderPage(page)
@@ -177,9 +181,9 @@ export function PageEditor({
       <div className="editor-controls">
         <Button
           variant="secondary"
-          disabled={disabled || busy}
+          disabled={disabled || busy || detecting}
           onClick={async () => {
-            setBusy(true);
+            setDetecting(true);
             try {
               const corners = await detectCorners(page.source);
               if (corners && validateQuad(corners, page.width, page.height)) {
@@ -194,7 +198,7 @@ export function PageEditor({
                 e instanceof Error ? e.message : "Detecção indisponível.",
               );
             } finally {
-              setBusy(false);
+              setDetecting(false);
             }
           }}
         >

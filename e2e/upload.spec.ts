@@ -62,5 +62,16 @@ test("timeout preserves the batch and draft while the user checks documents", as
     "Preservar esta ata",
   );
   await expect(page.locator(".destination")).toContainText("Atas e reuniões");
+  const download = page.waitForEvent("download");
+  await page
+    .getByRole("button", { name: "Baixar arquivo", exact: true })
+    .click();
+  await download;
+  await expect(
+    page.getByRole("button", { name: "Enviar novamente", exact: true }),
+  ).toBeEnabled();
+  await expect(page.getByRole("alert")).toContainText(
+    "Não foi possível confirmar",
+  );
   expect(await page.evaluate(() => (window as any).uploadAttempts)).toBe(1);
 });

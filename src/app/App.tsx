@@ -1,3 +1,4 @@
+import { useBatch } from "../features/scanner/batchStore";
 import { useEffect, useState, lazy, Suspense, type ReactNode } from "react";
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -24,9 +25,18 @@ import DocumentsPage from "../features/documents/DocumentsPage";
 import FoldersPage from "../features/folders/FoldersPage";
 import { Loading, Notice, Button } from "../shared/ui";
 const ScannerPage = lazy(() => import("../features/scanner/ScannerPage"));
-function RoomGate({ children }: { children: ReactNode }) {
+function RoomGate({
+  children,
+  allowDraft = false,
+}: {
+  children: ReactNode;
+  allowDraft?: boolean;
+}) {
+  const draft = useBatch((s) => s.batch);
   const room = useActiveRoom();
   const error = useRooms((s) => s.error);
+  if (allowDraft && draft && (draft.pages.length || draft.importedPdf))
+    return children;
   if (error)
     return (
       <Notice>
@@ -80,7 +90,7 @@ function PrivateApp() {
           <Route
             path="/scan"
             element={
-              <RoomGate>
+              <RoomGate allowDraft>
                 <ScannerPage />
               </RoomGate>
             }

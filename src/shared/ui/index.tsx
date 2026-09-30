@@ -109,8 +109,10 @@ export function Dialog({
   const id = useId();
   useEffect(() => {
     const before = document.activeElement as HTMLElement | null;
-    ref.current?.showModal();
+    const dialog = ref.current;
+    dialog?.showModal();
     return () => {
+      dialog?.close();
       before?.focus();
     };
   }, []);

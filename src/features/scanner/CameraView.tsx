@@ -52,12 +52,16 @@ export function CameraView({
         }),
       );
       setActive(true);
-      setDevices(
-        (await navigator.mediaDevices.enumerateDevices()).filter(
-          (d) => d.kind === "videoinput",
-        ),
-      );
+      // Enumeration is optional; a granted stream remains usable without a device list.
+      const available = await navigator.mediaDevices
+        .enumerateDevices()
+        .catch(() => []);
+      if (current !== generation.current) return;
+      setDevices(available.filter((device) => device.kind === "videoinput"));
     } catch (e) {
+      if (current !== generation.current) return;
+      stopCamera(stream.current);
+      stream.current = null;
       setActive(false);
       setError(
         e instanceof DOMException && e.name === "NotAllowedError"

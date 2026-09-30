@@ -47,6 +47,7 @@ export function SaveDocument({
       });
   }, [name, format, folder, originals, batch.context]);
   const locked = disabled || localBusy;
+  const canSend = room?.connectionStatus === "CONNECTED";
   const onProgress = (n: number, total: number) =>
     setProgress(Math.round((n / total) * 100));
   return (
@@ -119,14 +120,14 @@ export function SaveDocument({
           </>
         )}
         <div className="destination">
-          <span className="eyebrow">DESTINO DO ENVIO</span>
+          <h3>Destino do envio</h3>
           <strong>{room?.name ?? "Sala selecionada"}</strong>
           <small>{room?.storageProvider}</small>
           <p>{folder || "Pasta principal"}</p>
           <Button
             type="button"
             variant="ghost"
-            disabled={locked}
+            disabled={locked || !canSend}
             onClick={() => setPicking(true)}
           >
             <FolderOpen size={17} />
@@ -162,7 +163,12 @@ export function SaveDocument({
         <div className="save-actions">
           <Button
             type="submit"
-            disabled={locked || !name.trim() || (!pdf && !batch.pages.length)}
+            disabled={
+              locked ||
+              !canSend ||
+              !name.trim() ||
+              (!pdf && !batch.pages.length)
+            }
           >
             <Send size={17} />
             {batch.phase === "uncertain"
@@ -202,7 +208,7 @@ export function SaveDocument({
                 } finally {
                   if (useBatch.getState().batch?.context === batch.context)
                     useBatch.setState({
-                      batch: { ...batch, phase: "editing" },
+                      batch: { ...batch, phase: batch.phase },
                     });
                   setLocalBusy(false);
                 }
